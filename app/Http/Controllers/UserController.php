@@ -8,7 +8,7 @@ use Exception;
 use Faker\Extension\Extension;
 
 class UserController extends Controller
-{
+{   
     public function index() {
         $User = User::all();
         return response()->json($User);
@@ -21,7 +21,7 @@ class UserController extends Controller
             $User->email = $request->email;
             $User->password = bcrypt($request->password,[PASSWORD_BCRYPT]);
             $User->accountNumber = $request->accountNumber;
-            //$User->token = jwt token amit generálok
+            $User->token = '';
             $User->save();
            } catch (Exception $e ){
                 return response()->json([
@@ -52,8 +52,10 @@ class UserController extends Controller
                 $User->email = is_null($request->email) ? $User->email : $request->email;
                 $User->password = is_null($request->password) ? $User->password : bcrypt($request->password,[PASSWORD_BCRYPT]);
                 $User->accountNumber = is_null($request->accountNumber) ? $User->accountNumber : $request->accountNumber;
-                //$User->token = jwt token amit generálok
+                $User->token = '';
                 $User->save();
+                return response()->json($User);
+    
                } catch (Exception $e ){
                     return response()->json([
                         "message" => "Hiba a mentéskor",
@@ -64,10 +66,19 @@ class UserController extends Controller
        return response()->json([
         "message" => "Nincs ilyen felhasználó"
         ],404);
+    }
+    public function destroy($id) {
+        if (User::where('id',$id)->exists()) {
+            $User = User::find($id);
+            $User->delete();
+            return response()->json([
+                "message" => "User törölve"
+                ],202);
 
+        }
 
-
-
+        return response()->json([
+            "message" => "Nincs ilyen felhasználó"
+            ],404);
     }
 }
-
