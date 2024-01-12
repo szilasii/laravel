@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductsController;
 
@@ -33,3 +34,5 @@ Route::post("/products",[ProductsController::class,'store']);
 Route::put("/products/{id}",[ProductsController::class,'update']);
 Route::delete("/products/{id}",[ProductsController::class,'destroy']);
 
+
+Route::get("/carts",[CartController::class,'index']);
